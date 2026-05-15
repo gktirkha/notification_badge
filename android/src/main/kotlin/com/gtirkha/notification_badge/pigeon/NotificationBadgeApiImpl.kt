@@ -87,6 +87,11 @@ class NotificationBadgeApiImpl(context: Context) : NotificationBadgeApi {
             Log.d(
                 tag, "Supported providers: ${supportedProviders.joinToString()}"
             )
+        } else {
+            Log.d(
+                tag, "Not Supported"
+            )
+            return callback(Result.success(false))
         }
         return callback(Result.success(true))
     }
