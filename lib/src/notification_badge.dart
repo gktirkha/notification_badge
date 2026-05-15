@@ -1,4 +1,4 @@
-import 'package:notification_badge/src/platform/notification_badge_platform_interface.dart';
+import 'platform/notification_badge_platform_interface.dart';
 
 class NotificationBadge {
   final _instance = NotificationBadgePlatformInterface.instance;

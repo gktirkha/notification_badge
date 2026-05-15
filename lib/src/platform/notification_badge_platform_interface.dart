@@ -1,4 +1,4 @@
-import 'package:notification_badge/src/platform/notification_badge_platform_impl.dart';
+import 'notification_badge_platform_impl.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 abstract class NotificationBadgePlatformInterface extends PlatformInterface {

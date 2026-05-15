@@ -1,5 +1,5 @@
-import 'package:notification_badge/src/pigeon/notification_badge_api.g.dart';
-import 'package:notification_badge/src/platform/notification_badge_platform_interface.dart';
+import '../pigeon/notification_badge_api.g.dart';
+import 'notification_badge_platform_interface.dart';
 
 class NotificationBadgePlatformImpl
     implements NotificationBadgePlatformInterface {

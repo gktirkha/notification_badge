@@ -1,4 +1,17 @@
 include: package:flutter_lints/flutter.yaml
-
-# Additional information about this file can be found at
-# https://dart.dev/guides/language/analysis-options
+analyzer:
+  exclude:
+    - "**/*.g.dart"
+    - "**/*.freezed.dart"
+linter:
+  rules:
+    - avoid_redundant_argument_values
+    - exhaustive_cases
+    - sort_constructors_first
+    - prefer_single_quotes
+    - prefer_relative_imports
+    - require_trailing_commas
+    - sort_pub_dependencies
+    - public_member_api_docs
+    - library_private_types_in_public_api
+    - dangling_library_doc_comments
