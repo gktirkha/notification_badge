@@ -85,6 +85,7 @@ class NotificationBadgeApiPigeonCodec: FlutterStandardMessageCodec, @unchecked S
   static let shared = NotificationBadgeApiPigeonCodec(readerWriter: NotificationBadgeApiPigeonCodecReaderWriter())
 }
 
+
 /// Generated protocol from Pigeon that represents a handler of messages from Flutter.
 protocol NotificationBadgeApi {
   func setCount(count: Int64) throws -> Bool
@@ -93,6 +94,8 @@ protocol NotificationBadgeApi {
   func getDeviceManufacturer() throws -> String
   func incrementCount() throws -> Bool
   func decrementCount() throws -> Bool
+  func checkPermissions(completion: @escaping (Result<Bool, Error>) -> Void)
+  func requestPermissions(completion: @escaping (Result<Bool, Error>) -> Void)
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
@@ -180,6 +183,36 @@ class NotificationBadgeApiSetup {
       }
     } else {
       decrementCountChannel.setMessageHandler(nil)
+    }
+    let checkPermissionsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.notification_badge.NotificationBadgeApi.checkPermissions\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      checkPermissionsChannel.setMessageHandler { _, reply in
+        api.checkPermissions { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      checkPermissionsChannel.setMessageHandler(nil)
+    }
+    let requestPermissionsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.notification_badge.NotificationBadgeApi.requestPermissions\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      requestPermissionsChannel.setMessageHandler { _, reply in
+        api.requestPermissions { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      requestPermissionsChannel.setMessageHandler(nil)
     }
   }
 }

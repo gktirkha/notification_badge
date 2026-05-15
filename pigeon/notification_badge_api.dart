@@ -22,4 +22,8 @@ abstract class NotificationBadgeApi {
   String getDeviceManufacturer();
   bool incrementCount();
   bool decrementCount();
+  @async
+  bool checkPermissions();
+  @async
+  bool requestPermissions();
 }

@@ -107,4 +107,12 @@ class NotificationBadgeApiImpl(context: Context) : NotificationBadgeApi {
     override fun decrementCount(): Boolean {
         return setCount(getBadgeCount() - 1)
     }
+
+    override fun checkPermissions(callback: (Result<Boolean>) -> Unit) {
+        return callback(Result.success(true))
+    }
+
+    override fun requestPermissions(callback: (Result<Boolean>) -> Unit) {
+        return callback(Result.success(true))
+    }
 }
