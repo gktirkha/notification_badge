@@ -8,7 +8,7 @@ import io.flutter.embedding.engine.plugins.FlutterPlugin
 class NotificationBadgePlugin : FlutterPlugin {
     private var api: NotificationBadgeApi? = null
     override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
-        api = NotificationBadgeApiImpl()
+        api = NotificationBadgeApiImpl(binding.applicationContext)
         NotificationBadgeApi.setUp(binaryMessenger = binding.binaryMessenger, api = api)
     }
 
