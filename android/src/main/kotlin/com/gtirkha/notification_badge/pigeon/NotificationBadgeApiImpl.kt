@@ -36,7 +36,15 @@ class NotificationBadgeApiImpl(context: Context) : NotificationBadgeApi {
         NovaLauncherBadgeProvider(context)
     )
 
-    override fun setCount(count: Long): Boolean {
+    fun getSupportedProviders(): List<String> {
+        val supportedProviders =
+            badgeProviders.filter { it.isSupported() }.map { it.javaClass.simpleName }
+        return supportedProviders
+    }
+
+    override fun setCount(
+        count: Long, callback: (Result<Boolean>) -> Unit
+    ) {
         val countInt: Int = count.toInt()
         try {
             prefs.edit { putInt(badgePrefsKey, countInt) }
@@ -66,14 +74,13 @@ class NotificationBadgeApiImpl(context: Context) : NotificationBadgeApi {
                 }
             }
             Log.d(tag, "setBadgeCount completed. Success: $anySuccess")
-            return anySuccess
+            return callback(Result.success(anySuccess))
         } catch (_: Exception) {
-            return false
+            return callback(Result.success(false))
         }
-
     }
 
-    override fun isSupported(): Boolean {
+    override fun isSupported(callback: (Result<Boolean>) -> Unit) {
         val supported = badgeProviders.any { it.isSupported() }
         if (supported) {
             val supportedProviders = getSupportedProviders()
@@ -81,31 +88,42 @@ class NotificationBadgeApiImpl(context: Context) : NotificationBadgeApi {
                 tag, "Supported providers: ${supportedProviders.joinToString()}"
             )
         }
-        return supported
+        return callback(Result.success(true))
     }
 
-    fun getSupportedProviders(): List<String> {
-        val supportedProviders =
-            badgeProviders.filter { it.isSupported() }.map { it.javaClass.simpleName }
-        return supportedProviders
-    }
 
-    override fun getBadgeCount(): Long {
+    override fun getBadgeCount(callback: (Result<Long>) -> Unit) {
         val count = prefs.getInt(badgePrefsKey, 0)
         Log.d(tag, "getBadgeCount returning: $count")
-        return count.toLong()
+        return callback(Result.success(count.toLong()))
     }
 
-    override fun getDeviceManufacturer(): String {
-        return Build.MANUFACTURER
+    override fun getDeviceManufacturer(callback: (Result<String>) -> Unit) {
+        return callback(Result.success(Build.MANUFACTURER))
     }
 
-    override fun incrementCount(): Boolean {
-        return setCount(getBadgeCount() + 1)
+    override fun incrementCount(callback: (Result<Boolean>) -> Unit) {
+        getBadgeCount { result ->
+            result.fold(onSuccess = { currentCount ->
+                setCount(currentCount + 1) { setResult ->
+                    callback(setResult)
+                }
+            }, onFailure = { error ->
+                callback(Result.failure(error))
+            })
+        }
     }
 
-    override fun decrementCount(): Boolean {
-        return setCount(getBadgeCount() - 1)
+    override fun decrementCount(callback: (Result<Boolean>) -> Unit) {
+        getBadgeCount { result ->
+            result.fold(onSuccess = { currentCount ->
+                setCount(currentCount - 1) { setResult ->
+                    callback(setResult)
+                }
+            }, onFailure = { error ->
+                callback(Result.failure(error))
+            })
+        }
     }
 
     override fun checkPermissions(callback: (Result<Boolean>) -> Unit) {
