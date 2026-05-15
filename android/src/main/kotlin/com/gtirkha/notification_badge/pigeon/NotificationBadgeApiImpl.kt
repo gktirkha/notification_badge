@@ -17,9 +17,10 @@ import com.gtirkha.notification_badge.badge_provider.VivoBadgeProvider
 import com.gtirkha.notification_badge.badge_provider.XiaomiBadgeProvider
 
 class NotificationBadgeApiImpl(context: Context) : NotificationBadgeApi {
-    private val TAG: String = "NotificationBadge"
+    private val tag: String = "NotificationBadge"
     private val prefs: SharedPreferences =
         context.getSharedPreferences("com.gtirkha.notification_badge", Context.MODE_PRIVATE)
+    private val badgePrefsKey: String = "badge_count"
 
     private val badgeProviders: List<BadgeProvider> = listOf(
         SamsungBadgeProvider(context),
@@ -37,10 +38,10 @@ class NotificationBadgeApiImpl(context: Context) : NotificationBadgeApi {
     override fun setCount(count: Long): Boolean {
         val countInt: Int = count.toInt()
         try {
-            prefs.edit { putInt("badge_count", countInt) }
+            prefs.edit { putInt(badgePrefsKey, countInt) }
             var anySuccess = false
             val supportedProviders = badgeProviders.filter { it.isSupported() }
-            Log.d(TAG, "Found ${supportedProviders.size} supported badge providers")
+            Log.d(tag, "Found ${supportedProviders.size} supported badge providers")
 
             for (provider in supportedProviders) {
                 val providerName = provider.javaClass.simpleName
@@ -63,7 +64,7 @@ class NotificationBadgeApiImpl(context: Context) : NotificationBadgeApi {
                     )
                 }
             }
-            Log.d(TAG, "setBadgeCount completed. Success: $anySuccess")
+            Log.d(tag, "setBadgeCount completed. Success: $anySuccess")
             return anySuccess
         } catch (e: Exception) {
             return false
@@ -76,7 +77,7 @@ class NotificationBadgeApiImpl(context: Context) : NotificationBadgeApi {
         if (supported) {
             val supportedProviders = getSupportedProviders()
             Log.d(
-                TAG, "Supported providers: ${supportedProviders.joinToString()}"
+                tag, "Supported providers: ${supportedProviders.joinToString()}"
             )
         }
         return supported
@@ -86,5 +87,11 @@ class NotificationBadgeApiImpl(context: Context) : NotificationBadgeApi {
         val supportedProviders =
             badgeProviders.filter { it.isSupported() }.map { it.javaClass.simpleName }
         return supportedProviders
+    }
+
+    override fun getBadgeCount(): Long {
+        val count = prefs.getInt(badgePrefsKey, 0)
+        Log.d(tag, "getBadgeCount returning: $count")
+        return count.toLong()
     }
 }

@@ -60,6 +60,7 @@ private open class NotificationBadgeApiPigeonCodec : StandardMessageCodec() {
 interface NotificationBadgeApi {
   fun setCount(count: Long): Boolean
   fun isSupported(): Boolean
+  fun getBadgeCount(): Long
 
   companion object {
     /** The codec used by NotificationBadgeApi. */
@@ -93,6 +94,21 @@ interface NotificationBadgeApi {
           channel.setMessageHandler { _, reply ->
             val wrapped: List<Any?> = try {
               listOf(api.isSupported())
+            } catch (exception: Throwable) {
+              NotificationBadgeApiPigeonUtils.wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.notification_badge.NotificationBadgeApi.getBadgeCount$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            val wrapped: List<Any?> = try {
+              listOf(api.getBadgeCount())
             } catch (exception: Throwable) {
               NotificationBadgeApiPigeonUtils.wrapError(exception)
             }

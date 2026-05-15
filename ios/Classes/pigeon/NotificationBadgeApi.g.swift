@@ -89,6 +89,7 @@ class NotificationBadgeApiPigeonCodec: FlutterStandardMessageCodec, @unchecked S
 protocol NotificationBadgeApi {
   func setCount(count: Int64) throws -> Bool
   func isSupported() throws -> Bool
+  func getBadgeCount() throws -> Int64
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
@@ -124,6 +125,19 @@ class NotificationBadgeApiSetup {
       }
     } else {
       isSupportedChannel.setMessageHandler(nil)
+    }
+    let getBadgeCountChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.notification_badge.NotificationBadgeApi.getBadgeCount\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getBadgeCountChannel.setMessageHandler { _, reply in
+        do {
+          let result = try api.getBadgeCount()
+          reply(wrapResult(result))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      getBadgeCountChannel.setMessageHandler(nil)
     }
   }
 }
