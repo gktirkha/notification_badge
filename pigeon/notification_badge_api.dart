@@ -16,6 +16,7 @@ import 'package:pigeon/pigeon.dart';
 )
 @HostApi()
 abstract class NotificationBadgeApi {
-  @async
-  bool setCount();
+  bool setCount(int count);
+  bool isSupported();
+  int getBadgeCount();
 }

@@ -85,10 +85,10 @@ class NotificationBadgeApiPigeonCodec: FlutterStandardMessageCodec, @unchecked S
   static let shared = NotificationBadgeApiPigeonCodec(readerWriter: NotificationBadgeApiPigeonCodecReaderWriter())
 }
 
-
 /// Generated protocol from Pigeon that represents a handler of messages from Flutter.
 protocol NotificationBadgeApi {
-  func setCount(completion: @escaping (Result<Bool, Error>) -> Void)
+  func setCount(count: Int64) throws -> Bool
+  func isSupported() throws -> Bool
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
@@ -99,18 +99,31 @@ class NotificationBadgeApiSetup {
     let channelSuffix = messageChannelSuffix.count > 0 ? ".\(messageChannelSuffix)" : ""
     let setCountChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.notification_badge.NotificationBadgeApi.setCount\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
-      setCountChannel.setMessageHandler { _, reply in
-        api.setCount { result in
-          switch result {
-          case .success(let res):
-            reply(wrapResult(res))
-          case .failure(let error):
-            reply(wrapError(error))
-          }
+      setCountChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let countArg = args[0] as! Int64
+        do {
+          let result = try api.setCount(count: countArg)
+          reply(wrapResult(result))
+        } catch {
+          reply(wrapError(error))
         }
       }
     } else {
       setCountChannel.setMessageHandler(nil)
+    }
+    let isSupportedChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.notification_badge.NotificationBadgeApi.isSupported\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      isSupportedChannel.setMessageHandler { _, reply in
+        do {
+          let result = try api.isSupported()
+          reply(wrapResult(result))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      isSupportedChannel.setMessageHandler(nil)
     }
   }
 }

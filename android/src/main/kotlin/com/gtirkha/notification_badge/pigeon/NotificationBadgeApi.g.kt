@@ -56,10 +56,10 @@ private open class NotificationBadgeApiPigeonCodec : StandardMessageCodec() {
   }
 }
 
-
 /** Generated interface from Pigeon that represents a handler of messages from Flutter. */
 interface NotificationBadgeApi {
-  fun setCount(callback: (Result<Boolean>) -> Unit)
+  fun setCount(count: Long): Boolean
+  fun isSupported(): Boolean
 
   companion object {
     /** The codec used by NotificationBadgeApi. */
@@ -73,16 +73,30 @@ interface NotificationBadgeApi {
       run {
         val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.notification_badge.NotificationBadgeApi.setCount$separatedMessageChannelSuffix", codec)
         if (api != null) {
-          channel.setMessageHandler { _, reply ->
-            api.setCount{ result: Result<Boolean> ->
-              val error = result.exceptionOrNull()
-              if (error != null) {
-                reply.reply(NotificationBadgeApiPigeonUtils.wrapError(error))
-              } else {
-                val data = result.getOrNull()
-                reply.reply(NotificationBadgeApiPigeonUtils.wrapResult(data))
-              }
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val countArg = args[0] as Long
+            val wrapped: List<Any?> = try {
+              listOf(api.setCount(countArg))
+            } catch (exception: Throwable) {
+              NotificationBadgeApiPigeonUtils.wrapError(exception)
             }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.notification_badge.NotificationBadgeApi.isSupported$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            val wrapped: List<Any?> = try {
+              listOf(api.isSupported())
+            } catch (exception: Throwable) {
+              NotificationBadgeApiPigeonUtils.wrapError(exception)
+            }
+            reply.reply(wrapped)
           }
         } else {
           channel.setMessageHandler(null)
