@@ -29,8 +29,12 @@ class _BadgeDemoPageState extends State<BadgeDemoPage> {
   final _badge = NotificationBadgeApi();
   final _setCountController = TextEditingController();
   final _iconController = TextEditingController(text: 'ic_notification');
-  final _titleController = TextEditingController(text: 'Notification Badge Counter Example');
-  final _messageController = TextEditingController(text: 'You May Have Notifications');
+  final _titleController = TextEditingController(
+    text: 'Notification Badge Counter Example',
+  );
+  final _messageController = TextEditingController(
+    text: 'You May Have Notifications',
+  );
   bool _fallbackToUniversal = true;
 
   int _badgeCount = 0;
@@ -140,8 +144,9 @@ class _BadgeDemoPageState extends State<BadgeDemoPage> {
       fallbackToUniversaLAndroidBadger: _fallbackToUniversal,
     );
     setState(
-      () => _status =
-          success ? 'Notification config applied' : 'Failed to apply config',
+      () => _status = success
+          ? 'Notification config applied'
+          : 'Failed to apply config',
     );
   }
 
