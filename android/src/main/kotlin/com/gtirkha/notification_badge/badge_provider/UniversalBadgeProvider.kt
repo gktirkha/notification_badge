@@ -21,9 +21,9 @@ class UniversalBadgeProvider(private val context: Context) : BadgeProvider {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
     }
 
-    override fun setBadgeCount(count: Int): Boolean = setBadgeCount(count, null, null)
+    override fun setBadgeCount(count: Int): Boolean = setBadgeCount(count, null, null, null)
 
-    fun setBadgeCount(count: Int, notificationTitle: String?, notificationIcon: String? = null): Boolean {
+    fun setBadgeCount(count: Int, notificationTitle: String?, notificationIcon: String? = null, notificationMessage: String? = null): Boolean {
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             return false
@@ -50,11 +50,12 @@ class UniversalBadgeProvider(private val context: Context) : BadgeProvider {
             }
 
             val title = notificationTitle?.takeIf { it.isNotBlank() } ?: " "
+            val message = notificationMessage?.takeIf { it.isNotBlank() } ?: " "
 
             val notification = NotificationCompat.Builder(context, CHANNEL_ID)
                 .setSmallIcon(resolveIcon(notificationIcon))
                 .setContentTitle(title)
-                .setContentText(" ")
+                .setContentText(message)
                 .setNumber(count)
                 .setSilent(true)
                 .setOnlyAlertOnce(true)

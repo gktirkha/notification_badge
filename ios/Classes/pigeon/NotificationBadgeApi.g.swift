@@ -97,8 +97,7 @@ protocol NotificationBadgeApi {
   func decrementCount(completion: @escaping (Result<Bool, Error>) -> Void)
   func checkPermissions(completion: @escaping (Result<Bool, Error>) -> Void)
   func requestPermissions(completion: @escaping (Result<Bool, Error>) -> Void)
-  func setNotificationTitle(title: String, completion: @escaping (Result<Bool, Error>) -> Void)
-  func setNotificationIcon(icon: String, completion: @escaping (Result<Bool, Error>) -> Void)
+  func setAndroidNotificationConfig(notificationIcon: String, notificationTitle: String?, notificationMessage: String?, fallbackToUniversaLAndroidBadger: Bool, completion: @escaping (Result<Bool, Error>) -> Void)
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
@@ -244,12 +243,15 @@ class NotificationBadgeApiSetup {
     } else {
       requestPermissionsChannel.setMessageHandler(nil)
     }
-    let setNotificationTitleChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.notification_badge.NotificationBadgeApi.setNotificationTitle\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setAndroidNotificationConfigChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.notification_badge.NotificationBadgeApi.setAndroidNotificationConfig\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
-      setNotificationTitleChannel.setMessageHandler { message, reply in
+      setAndroidNotificationConfigChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
-        let titleArg = args[0] as! String
-        api.setNotificationTitle(title: titleArg) { result in
+        let notificationIconArg = args[0] as! String
+        let notificationTitleArg: String? = nilOrValue(args[1])
+        let notificationMessageArg: String? = nilOrValue(args[2])
+        let fallbackToUniversaLAndroidBadgerArg = args[3] as! Bool
+        api.setAndroidNotificationConfig(notificationIcon: notificationIconArg, notificationTitle: notificationTitleArg, notificationMessage: notificationMessageArg, fallbackToUniversaLAndroidBadger: fallbackToUniversaLAndroidBadgerArg) { result in
           switch result {
           case .success(let res):
             reply(wrapResult(res))
@@ -259,24 +261,7 @@ class NotificationBadgeApiSetup {
         }
       }
     } else {
-      setNotificationTitleChannel.setMessageHandler(nil)
-    }
-    let setNotificationIconChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.notification_badge.NotificationBadgeApi.setNotificationIcon\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
-    if let api = api {
-      setNotificationIconChannel.setMessageHandler { message, reply in
-        let args = message as! [Any?]
-        let iconArg = args[0] as! String
-        api.setNotificationIcon(icon: iconArg) { result in
-          switch result {
-          case .success(let res):
-            reply(wrapResult(res))
-          case .failure(let error):
-            reply(wrapError(error))
-          }
-        }
-      }
-    } else {
-      setNotificationIconChannel.setMessageHandler(nil)
+      setAndroidNotificationConfigChannel.setMessageHandler(nil)
     }
   }
 }

@@ -68,8 +68,7 @@ interface NotificationBadgeApi {
   fun decrementCount(callback: (Result<Boolean>) -> Unit)
   fun checkPermissions(callback: (Result<Boolean>) -> Unit)
   fun requestPermissions(callback: (Result<Boolean>) -> Unit)
-  fun setNotificationTitle(title: String, callback: (Result<Boolean>) -> Unit)
-  fun setNotificationIcon(icon: String, callback: (Result<Boolean>) -> Unit)
+  fun setAndroidNotificationConfig(notificationIcon: String, notificationTitle: String?, notificationMessage: String?, fallbackToUniversaLAndroidBadger: Boolean, callback: (Result<Boolean>) -> Unit)
 
   companion object {
     /** The codec used by NotificationBadgeApi. */
@@ -245,32 +244,15 @@ interface NotificationBadgeApi {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.notification_badge.NotificationBadgeApi.setNotificationTitle$separatedMessageChannelSuffix", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.notification_badge.NotificationBadgeApi.setAndroidNotificationConfig$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
-            val titleArg = args[0] as String
-            api.setNotificationTitle(titleArg) { result: Result<Boolean> ->
-              val error = result.exceptionOrNull()
-              if (error != null) {
-                reply.reply(NotificationBadgeApiPigeonUtils.wrapError(error))
-              } else {
-                val data = result.getOrNull()
-                reply.reply(NotificationBadgeApiPigeonUtils.wrapResult(data))
-              }
-            }
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-      run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.notification_badge.NotificationBadgeApi.setNotificationIcon$separatedMessageChannelSuffix", codec)
-        if (api != null) {
-          channel.setMessageHandler { message, reply ->
-            val args = message as List<Any?>
-            val iconArg = args[0] as String
-            api.setNotificationIcon(iconArg) { result: Result<Boolean> ->
+            val notificationIconArg = args[0] as String
+            val notificationTitleArg = args[1] as String?
+            val notificationMessageArg = args[2] as String?
+            val fallbackToUniversaLAndroidBadgerArg = args[3] as Boolean
+            api.setAndroidNotificationConfig(notificationIconArg, notificationTitleArg, notificationMessageArg, fallbackToUniversaLAndroidBadgerArg) { result: Result<Boolean> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(NotificationBadgeApiPigeonUtils.wrapError(error))

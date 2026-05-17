@@ -36,8 +36,10 @@ class NotificationBadgeApiImpl(private val context: Context) : NotificationBadge
 
     companion object {
         private const val PERMISSION_REQUEST_CODE = 0x4E42_5047
-        var notificationTitle: String = "Notification Badge"
-        var notificationIcon: String = ""
+        var notificationIcon: String = "ic_notification"
+        var notificationTitle: String? = null
+        var notificationMessage: String? = null
+        var fallbackToUniversal: Boolean = true
     }
 
     fun attachToActivity(binding: ActivityPluginBinding) {
@@ -98,10 +100,10 @@ class NotificationBadgeApiImpl(private val context: Context) : NotificationBadge
 
             // UniversalBadgeProvider (notification-based) is a last resort only when
             // no manufacturer-specific provider succeeded, to avoid unnecessary notifications.
-            if (!anySuccess && universalProvider != null) {
+            if (!anySuccess && fallbackToUniversal && universalProvider != null) {
                 Log.d(tag, "No specific provider succeeded, falling back to UniversalBadgeProvider")
                 try {
-                    if (universalProvider.setBadgeCount(countInt, notificationTitle, notificationIcon.takeIf { it.isNotBlank() })) {
+                    if (universalProvider.setBadgeCount(countInt, notificationTitle, notificationIcon.takeIf { it.isNotBlank() }, notificationMessage)) {
                         anySuccess = true
                         Log.d(tag, "Successfully set badge using UniversalBadgeProvider")
                     }
@@ -208,13 +210,17 @@ class NotificationBadgeApiImpl(private val context: Context) : NotificationBadge
         setCount(0, callback)
     }
 
-    override fun setNotificationTitle(title: String, callback: (Result<Boolean>) -> Unit) {
-        notificationTitle = title
-        callback(Result.success(true))
-    }
-
-    override fun setNotificationIcon(icon: String, callback: (Result<Boolean>) -> Unit) {
-        notificationIcon = icon
+    override fun setAndroidNotificationConfig(
+        notificationIcon: String,
+        notificationTitle: String?,
+        notificationMessage: String?,
+        fallbackToUniversaLAndroidBadger: Boolean,
+        callback: (Result<Boolean>) -> Unit
+    ) {
+        Companion.notificationIcon = notificationIcon
+        Companion.notificationTitle = notificationTitle
+        Companion.notificationMessage = notificationMessage
+        Companion.fallbackToUniversal = fallbackToUniversaLAndroidBadger
         callback(Result.success(true))
     }
 }

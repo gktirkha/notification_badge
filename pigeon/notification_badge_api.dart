@@ -35,7 +35,10 @@ abstract class NotificationBadgeApi {
   @async
   bool requestPermissions();
   @async
-  bool setNotificationTitle(String title);
-  @async
-  bool setNotificationIcon(String icon);
+  bool setAndroidNotificationConfig({
+    String notificationIcon = 'ic_notification',
+    String? notificationTitle,
+    String? notificationMessage,
+    bool fallbackToUniversaLAndroidBadger = true,
+  });
 }

@@ -117,11 +117,7 @@ class NotificationBadgeApiImpl: NotificationBadgeApi {
     setCount(count: 0, completion: completion)
   }
 
-  func setNotificationTitle(title: String, completion: @escaping (Result<Bool, any Error>) -> Void) {
-    completion(.success(true))
-  }
-
-  func setNotificationIcon(icon: String, completion: @escaping (Result<Bool, any Error>) -> Void) {
+  func setAndroidNotificationConfig(notificationIcon: String, notificationTitle: String?, notificationMessage: String?, fallbackToUniversaLAndroidBadger: Bool, completion: @escaping (Result<Bool, any Error>) -> Void) {
     completion(.success(true))
   }
 }

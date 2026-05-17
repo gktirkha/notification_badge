@@ -28,8 +28,10 @@ class BadgeDemoPage extends StatefulWidget {
 class _BadgeDemoPageState extends State<BadgeDemoPage> {
   final _badge = NotificationBadgeApi();
   final _setCountController = TextEditingController();
-  final _titleController = TextEditingController(text: 'Notification Badge');
-  final _iconController = TextEditingController();
+  final _iconController = TextEditingController(text: 'ic_notification');
+  final _titleController = TextEditingController();
+  final _messageController = TextEditingController();
+  bool _fallbackToUniversal = true;
 
   int _badgeCount = 0;
   bool _hasPermission = false;
@@ -46,8 +48,9 @@ class _BadgeDemoPageState extends State<BadgeDemoPage> {
   @override
   void dispose() {
     _setCountController.dispose();
-    _titleController.dispose();
     _iconController.dispose();
+    _titleController.dispose();
+    _messageController.dispose();
     super.dispose();
   }
 
@@ -114,27 +117,25 @@ class _BadgeDemoPageState extends State<BadgeDemoPage> {
     );
   }
 
-  Future<void> _setNotificationTitle() async {
-    final title = _titleController.text.trim();
-    if (title.isEmpty) {
-      setState(() => _status = 'Title cannot be empty');
-      return;
-    }
-    final success = await _badge.setNotificationTitle(title);
-    setState(
-      () => _status = success ? 'Notification title set' : 'Failed to set title',
-    );
-  }
-
-  Future<void> _setNotificationIcon() async {
+  Future<void> _applyNotificationConfig() async {
     final icon = _iconController.text.trim();
     if (icon.isEmpty) {
       setState(() => _status = 'Icon name cannot be empty');
       return;
     }
-    final success = await _badge.setNotificationIcon(icon);
+    final success = await _badge.setAndroidNotificationConfig(
+      notificationIcon: icon,
+      notificationTitle: _titleController.text.trim().isEmpty
+          ? null
+          : _titleController.text.trim(),
+      notificationMessage: _messageController.text.trim().isEmpty
+          ? null
+          : _messageController.text.trim(),
+      fallbackToUniversaLAndroidBadger: _fallbackToUniversal,
+    );
     setState(
-      () => _status = success ? 'Notification icon set' : 'Failed to set icon',
+      () => _status =
+          success ? 'Notification config applied' : 'Failed to apply config',
     );
   }
 
@@ -229,50 +230,49 @@ class _BadgeDemoPageState extends State<BadgeDemoPage> {
           ],
           const SizedBox(height: 28),
           Text(
-            'Notification Settings (Android)',
+            'Notification Config (Android)',
             style: theme.textTheme.titleSmall?.copyWith(
               color: theme.colorScheme.onSurfaceVariant,
             ),
           ),
           const SizedBox(height: 12),
-          Row(
-            children: [
-              Expanded(
-                child: TextField(
-                  controller: _titleController,
-                  decoration: const InputDecoration(
-                    labelText: 'Notification title',
-                    border: OutlineInputBorder(),
-                    isDense: true,
-                  ),
-                ),
-              ),
-              const SizedBox(width: 12),
-              FilledButton.tonal(
-                onPressed: _setNotificationTitle,
-                child: const Text('Apply'),
-              ),
-            ],
+          TextField(
+            controller: _iconController,
+            decoration: const InputDecoration(
+              labelText: 'Icon drawable name',
+              hintText: 'ic_notification',
+              border: OutlineInputBorder(),
+              isDense: true,
+            ),
           ),
           const SizedBox(height: 12),
-          Row(
-            children: [
-              Expanded(
-                child: TextField(
-                  controller: _iconController,
-                  decoration: const InputDecoration(
-                    labelText: 'Icon drawable name (e.g. ic_notification)',
-                    border: OutlineInputBorder(),
-                    isDense: true,
-                  ),
-                ),
-              ),
-              const SizedBox(width: 12),
-              FilledButton.tonal(
-                onPressed: _setNotificationIcon,
-                child: const Text('Apply'),
-              ),
-            ],
+          TextField(
+            controller: _titleController,
+            decoration: const InputDecoration(
+              labelText: 'Notification title (optional)',
+              border: OutlineInputBorder(),
+              isDense: true,
+            ),
+          ),
+          const SizedBox(height: 12),
+          TextField(
+            controller: _messageController,
+            decoration: const InputDecoration(
+              labelText: 'Notification message (optional)',
+              border: OutlineInputBorder(),
+              isDense: true,
+            ),
+          ),
+          const SizedBox(height: 8),
+          SwitchListTile(
+            contentPadding: EdgeInsets.zero,
+            title: const Text('Fallback to universal badge provider'),
+            value: _fallbackToUniversal,
+            onChanged: (v) => setState(() => _fallbackToUniversal = v),
+          ),
+          FilledButton.tonal(
+            onPressed: _applyNotificationConfig,
+            child: const Text('Apply Config'),
           ),
           if (_status.isNotEmpty) ...[
             const SizedBox(height: 20),
