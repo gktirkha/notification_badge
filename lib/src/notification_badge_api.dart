@@ -10,9 +10,9 @@ import 'package:flutter/services.dart';
 import 'package:meta/meta.dart' show immutable, protected, visibleForTesting;
 
 Object? _extractReplyValueOrThrow(
-  List<Object?>? replyList,
-  String channelName, {
-  required bool isNullValid,
+    List<Object?>? replyList,
+    String channelName, {
+    required bool isNullValid,
 }) {
   if (replyList == null) {
     throw PlatformException(
@@ -33,6 +33,8 @@ Object? _extractReplyValueOrThrow(
   }
   return replyList.firstOrNull;
 }
+
+
 
 class _PigeonCodec extends StandardMessageCodec {
   const _PigeonCodec();
@@ -65,13 +67,9 @@ class NotificationBadgeApi {
   /// Constructor for [NotificationBadgeApi].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
-  NotificationBadgeApi({
-    BinaryMessenger? binaryMessenger,
-    String messageChannelSuffix = '',
-  }) : pigeonVar_binaryMessenger = binaryMessenger,
-       pigeonVar_messageChannelSuffix = messageChannelSuffix.isNotEmpty
-           ? '.$messageChannelSuffix'
-           : '';
+  NotificationBadgeApi({BinaryMessenger? binaryMessenger, String messageChannelSuffix = ''})
+      : pigeonVar_binaryMessenger = binaryMessenger,
+        pigeonVar_messageChannelSuffix = messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
   final BinaryMessenger? pigeonVar_binaryMessenger;
 
   static const MessageCodec<Object?> pigeonChannelCodec = _PigeonCodec();
@@ -80,8 +78,7 @@ class NotificationBadgeApi {
 
   /// Returns `true` if at least one badge provider is available on this device.
   Future<bool> isSupported() async {
-    final pigeonVar_channelName =
-        'dev.flutter.pigeon.notification_badge.NotificationBadgeApi.isSupported$pigeonVar_messageChannelSuffix';
+    final pigeonVar_channelName = 'dev.flutter.pigeon.notification_badge_counter.NotificationBadgeApi.isSupported$pigeonVar_messageChannelSuffix';
     final pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -91,39 +88,37 @@ class NotificationBadgeApi {
     final pigeonVar_replyList = await pigeonVar_sendFuture as List<Object?>?;
 
     final Object? pigeonVar_replyValue = _extractReplyValueOrThrow(
-      pigeonVar_replyList,
-      pigeonVar_channelName,
-      isNullValid: false,
-    );
+        pigeonVar_replyList,
+        pigeonVar_channelName,
+        isNullValid: false,
+    )
+    ;
     return pigeonVar_replyValue! as bool;
   }
 
   /// Sets the app icon badge to [count]. Returns `true` on success.
   Future<bool> setCount(int count) async {
-    final pigeonVar_channelName =
-        'dev.flutter.pigeon.notification_badge.NotificationBadgeApi.setCount$pigeonVar_messageChannelSuffix';
+    final pigeonVar_channelName = 'dev.flutter.pigeon.notification_badge_counter.NotificationBadgeApi.setCount$pigeonVar_messageChannelSuffix';
     final pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
       binaryMessenger: pigeonVar_binaryMessenger,
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
-      <Object?>[count],
-    );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[count]);
     final pigeonVar_replyList = await pigeonVar_sendFuture as List<Object?>?;
 
     final Object? pigeonVar_replyValue = _extractReplyValueOrThrow(
-      pigeonVar_replyList,
-      pigeonVar_channelName,
-      isNullValid: false,
-    );
+        pigeonVar_replyList,
+        pigeonVar_channelName,
+        isNullValid: false,
+    )
+    ;
     return pigeonVar_replyValue! as bool;
   }
 
   /// Returns the current badge count stored by the plugin.
   Future<int> getBadgeCount() async {
-    final pigeonVar_channelName =
-        'dev.flutter.pigeon.notification_badge.NotificationBadgeApi.getBadgeCount$pigeonVar_messageChannelSuffix';
+    final pigeonVar_channelName = 'dev.flutter.pigeon.notification_badge_counter.NotificationBadgeApi.getBadgeCount$pigeonVar_messageChannelSuffix';
     final pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -133,17 +128,17 @@ class NotificationBadgeApi {
     final pigeonVar_replyList = await pigeonVar_sendFuture as List<Object?>?;
 
     final Object? pigeonVar_replyValue = _extractReplyValueOrThrow(
-      pigeonVar_replyList,
-      pigeonVar_channelName,
-      isNullValid: false,
-    );
+        pigeonVar_replyList,
+        pigeonVar_channelName,
+        isNullValid: false,
+    )
+    ;
     return pigeonVar_replyValue! as int;
   }
 
   /// Clears the badge by setting the count to 0. Returns `true` on success.
   Future<bool> clearBadge() async {
-    final pigeonVar_channelName =
-        'dev.flutter.pigeon.notification_badge.NotificationBadgeApi.clearBadge$pigeonVar_messageChannelSuffix';
+    final pigeonVar_channelName = 'dev.flutter.pigeon.notification_badge_counter.NotificationBadgeApi.clearBadge$pigeonVar_messageChannelSuffix';
     final pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -153,17 +148,17 @@ class NotificationBadgeApi {
     final pigeonVar_replyList = await pigeonVar_sendFuture as List<Object?>?;
 
     final Object? pigeonVar_replyValue = _extractReplyValueOrThrow(
-      pigeonVar_replyList,
-      pigeonVar_channelName,
-      isNullValid: false,
-    );
+        pigeonVar_replyList,
+        pigeonVar_channelName,
+        isNullValid: false,
+    )
+    ;
     return pigeonVar_replyValue! as bool;
   }
 
   /// Returns the device manufacturer string (e.g. `"samsung"`, `"Apple"`).
   Future<String> getDeviceManufacturer() async {
-    final pigeonVar_channelName =
-        'dev.flutter.pigeon.notification_badge.NotificationBadgeApi.getDeviceManufacturer$pigeonVar_messageChannelSuffix';
+    final pigeonVar_channelName = 'dev.flutter.pigeon.notification_badge_counter.NotificationBadgeApi.getDeviceManufacturer$pigeonVar_messageChannelSuffix';
     final pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -173,17 +168,17 @@ class NotificationBadgeApi {
     final pigeonVar_replyList = await pigeonVar_sendFuture as List<Object?>?;
 
     final Object? pigeonVar_replyValue = _extractReplyValueOrThrow(
-      pigeonVar_replyList,
-      pigeonVar_channelName,
-      isNullValid: false,
-    );
+        pigeonVar_replyList,
+        pigeonVar_channelName,
+        isNullValid: false,
+    )
+    ;
     return pigeonVar_replyValue! as String;
   }
 
   /// Increments the badge count by 1. Returns `true` on success.
   Future<bool> incrementCount() async {
-    final pigeonVar_channelName =
-        'dev.flutter.pigeon.notification_badge.NotificationBadgeApi.incrementCount$pigeonVar_messageChannelSuffix';
+    final pigeonVar_channelName = 'dev.flutter.pigeon.notification_badge_counter.NotificationBadgeApi.incrementCount$pigeonVar_messageChannelSuffix';
     final pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -193,17 +188,17 @@ class NotificationBadgeApi {
     final pigeonVar_replyList = await pigeonVar_sendFuture as List<Object?>?;
 
     final Object? pigeonVar_replyValue = _extractReplyValueOrThrow(
-      pigeonVar_replyList,
-      pigeonVar_channelName,
-      isNullValid: false,
-    );
+        pigeonVar_replyList,
+        pigeonVar_channelName,
+        isNullValid: false,
+    )
+    ;
     return pigeonVar_replyValue! as bool;
   }
 
   /// Decrements the badge count by 1 (minimum 0). Returns `true` on success.
   Future<bool> decrementCount() async {
-    final pigeonVar_channelName =
-        'dev.flutter.pigeon.notification_badge.NotificationBadgeApi.decrementCount$pigeonVar_messageChannelSuffix';
+    final pigeonVar_channelName = 'dev.flutter.pigeon.notification_badge_counter.NotificationBadgeApi.decrementCount$pigeonVar_messageChannelSuffix';
     final pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -213,17 +208,17 @@ class NotificationBadgeApi {
     final pigeonVar_replyList = await pigeonVar_sendFuture as List<Object?>?;
 
     final Object? pigeonVar_replyValue = _extractReplyValueOrThrow(
-      pigeonVar_replyList,
-      pigeonVar_channelName,
-      isNullValid: false,
-    );
+        pigeonVar_replyList,
+        pigeonVar_channelName,
+        isNullValid: false,
+    )
+    ;
     return pigeonVar_replyValue! as bool;
   }
 
   /// Returns `true` if the app has permission to display badge notifications.
   Future<bool> checkPermissions() async {
-    final pigeonVar_channelName =
-        'dev.flutter.pigeon.notification_badge.NotificationBadgeApi.checkPermissions$pigeonVar_messageChannelSuffix';
+    final pigeonVar_channelName = 'dev.flutter.pigeon.notification_badge_counter.NotificationBadgeApi.checkPermissions$pigeonVar_messageChannelSuffix';
     final pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -233,10 +228,11 @@ class NotificationBadgeApi {
     final pigeonVar_replyList = await pigeonVar_sendFuture as List<Object?>?;
 
     final Object? pigeonVar_replyValue = _extractReplyValueOrThrow(
-      pigeonVar_replyList,
-      pigeonVar_channelName,
-      isNullValid: false,
-    );
+        pigeonVar_replyList,
+        pigeonVar_channelName,
+        isNullValid: false,
+    )
+    ;
     return pigeonVar_replyValue! as bool;
   }
 
@@ -245,8 +241,7 @@ class NotificationBadgeApi {
   /// Returns `true` if permission was granted. On Android below API 33,
   /// always returns `true`. On iOS, shows the system permission dialog.
   Future<bool> requestPermissions() async {
-    final pigeonVar_channelName =
-        'dev.flutter.pigeon.notification_badge.NotificationBadgeApi.requestPermissions$pigeonVar_messageChannelSuffix';
+    final pigeonVar_channelName = 'dev.flutter.pigeon.notification_badge_counter.NotificationBadgeApi.requestPermissions$pigeonVar_messageChannelSuffix';
     final pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -256,10 +251,11 @@ class NotificationBadgeApi {
     final pigeonVar_replyList = await pigeonVar_sendFuture as List<Object?>?;
 
     final Object? pigeonVar_replyValue = _extractReplyValueOrThrow(
-      pigeonVar_replyList,
-      pigeonVar_channelName,
-      isNullValid: false,
-    );
+        pigeonVar_replyList,
+        pigeonVar_channelName,
+        isNullValid: false,
+    )
+    ;
     return pigeonVar_replyValue! as bool;
   }
 
@@ -273,33 +269,22 @@ class NotificationBadgeApi {
   /// - [notificationTitle]: title shown in the notification shade. `null` renders a blank title.
   /// - [notificationMessage]: body text shown in the notification shade. `null` renders a blank body.
   /// - [fallbackToUniversaLAndroidBadger]: set to `false` to disable the fallback entirely.
-  Future<bool> setAndroidNotificationConfig({
-    String notificationIcon = 'ic_notification',
-    String? notificationTitle,
-    String? notificationMessage,
-    bool fallbackToUniversaLAndroidBadger = true,
-  }) async {
-    final pigeonVar_channelName =
-        'dev.flutter.pigeon.notification_badge.NotificationBadgeApi.setAndroidNotificationConfig$pigeonVar_messageChannelSuffix';
+  Future<bool> setAndroidNotificationConfig({String notificationIcon = 'ic_notification', String? notificationTitle, String? notificationMessage, bool fallbackToUniversaLAndroidBadger = true, }) async {
+    final pigeonVar_channelName = 'dev.flutter.pigeon.notification_badge_counter.NotificationBadgeApi.setAndroidNotificationConfig$pigeonVar_messageChannelSuffix';
     final pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
       binaryMessenger: pigeonVar_binaryMessenger,
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel
-        .send(<Object?>[
-          notificationIcon,
-          notificationTitle,
-          notificationMessage,
-          fallbackToUniversaLAndroidBadger,
-        ]);
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[notificationIcon, notificationTitle, notificationMessage, fallbackToUniversaLAndroidBadger]);
     final pigeonVar_replyList = await pigeonVar_sendFuture as List<Object?>?;
 
     final Object? pigeonVar_replyValue = _extractReplyValueOrThrow(
-      pigeonVar_replyList,
-      pigeonVar_channelName,
-      isNullValid: false,
-    );
+        pigeonVar_replyList,
+        pigeonVar_channelName,
+        isNullValid: false,
+    )
+    ;
     return pigeonVar_replyValue! as bool;
   }
 }

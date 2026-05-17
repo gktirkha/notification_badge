@@ -115,7 +115,7 @@ interface NotificationBadgeApi {
     fun setUp(binaryMessenger: BinaryMessenger, api: NotificationBadgeApi?, messageChannelSuffix: String = "") {
       val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.notification_badge.NotificationBadgeApi.isSupported$separatedMessageChannelSuffix", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.notification_badge_counter.NotificationBadgeApi.isSupported$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
             api.isSupported{ result: Result<Boolean> ->
@@ -133,7 +133,7 @@ interface NotificationBadgeApi {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.notification_badge.NotificationBadgeApi.setCount$separatedMessageChannelSuffix", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.notification_badge_counter.NotificationBadgeApi.setCount$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
@@ -153,7 +153,7 @@ interface NotificationBadgeApi {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.notification_badge.NotificationBadgeApi.getBadgeCount$separatedMessageChannelSuffix", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.notification_badge_counter.NotificationBadgeApi.getBadgeCount$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
             api.getBadgeCount{ result: Result<Long> ->
@@ -171,7 +171,7 @@ interface NotificationBadgeApi {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.notification_badge.NotificationBadgeApi.clearBadge$separatedMessageChannelSuffix", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.notification_badge_counter.NotificationBadgeApi.clearBadge$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
             api.clearBadge{ result: Result<Boolean> ->
@@ -189,7 +189,7 @@ interface NotificationBadgeApi {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.notification_badge.NotificationBadgeApi.getDeviceManufacturer$separatedMessageChannelSuffix", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.notification_badge_counter.NotificationBadgeApi.getDeviceManufacturer$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
             api.getDeviceManufacturer{ result: Result<String> ->
@@ -207,7 +207,7 @@ interface NotificationBadgeApi {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.notification_badge.NotificationBadgeApi.incrementCount$separatedMessageChannelSuffix", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.notification_badge_counter.NotificationBadgeApi.incrementCount$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
             api.incrementCount{ result: Result<Boolean> ->
@@ -225,7 +225,7 @@ interface NotificationBadgeApi {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.notification_badge.NotificationBadgeApi.decrementCount$separatedMessageChannelSuffix", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.notification_badge_counter.NotificationBadgeApi.decrementCount$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
             api.decrementCount{ result: Result<Boolean> ->
@@ -243,7 +243,7 @@ interface NotificationBadgeApi {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.notification_badge.NotificationBadgeApi.checkPermissions$separatedMessageChannelSuffix", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.notification_badge_counter.NotificationBadgeApi.checkPermissions$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
             api.checkPermissions{ result: Result<Boolean> ->
@@ -261,7 +261,7 @@ interface NotificationBadgeApi {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.notification_badge.NotificationBadgeApi.requestPermissions$separatedMessageChannelSuffix", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.notification_badge_counter.NotificationBadgeApi.requestPermissions$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
             api.requestPermissions{ result: Result<Boolean> ->
@@ -279,7 +279,7 @@ interface NotificationBadgeApi {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.notification_badge.NotificationBadgeApi.setAndroidNotificationConfig$separatedMessageChannelSuffix", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.notification_badge_counter.NotificationBadgeApi.setAndroidNotificationConfig$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>

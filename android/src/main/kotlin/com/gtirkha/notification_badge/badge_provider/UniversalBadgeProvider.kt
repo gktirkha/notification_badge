@@ -78,6 +78,8 @@ class UniversalBadgeProvider(private val context: Context) : BadgeProvider {
         }
     }
 
+    fun initializeChannel() = ensureChannel()
+
     private fun ensureChannel() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

@@ -166,24 +166,38 @@ class NotificationBadgeApiImpl(private val context: Context) : NotificationBadge
         }
     }
 
+    private fun initializeChannelIfPermitted() {
+        val permitted = Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||
+            ContextCompat.checkSelfPermission(
+                context, android.Manifest.permission.POST_NOTIFICATIONS
+            ) == PackageManager.PERMISSION_GRANTED
+        if (permitted) {
+            badgeProviders.filterIsInstance<UniversalBadgeProvider>().firstOrNull()?.initializeChannel()
+        }
+    }
+
     override fun checkPermissions(callback: (Result<Boolean>) -> Unit) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+            initializeChannelIfPermitted()
             return callback(Result.success(true))
         }
         val granted = ContextCompat.checkSelfPermission(
             context, android.Manifest.permission.POST_NOTIFICATIONS
         ) == PackageManager.PERMISSION_GRANTED
+        if (granted) initializeChannelIfPermitted()
         callback(Result.success(granted))
     }
 
     override fun requestPermissions(callback: (Result<Boolean>) -> Unit) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+            initializeChannelIfPermitted()
             return callback(Result.success(true))
         }
         if (ContextCompat.checkSelfPermission(
                 context, android.Manifest.permission.POST_NOTIFICATIONS
             ) == PackageManager.PERMISSION_GRANTED
         ) {
+            initializeChannelIfPermitted()
             return callback(Result.success(true))
         }
         val currentActivity = activity ?: return callback(Result.success(false))
@@ -203,6 +217,7 @@ class NotificationBadgeApiImpl(private val context: Context) : NotificationBadge
         if (requestCode != PERMISSION_REQUEST_CODE) return false
         val granted = grantResults.isNotEmpty() &&
                 grantResults[0] == PackageManager.PERMISSION_GRANTED
+        if (granted) initializeChannelIfPermitted()
         pendingPermissionCallback?.invoke(Result.success(granted))
         pendingPermissionCallback = null
         return true

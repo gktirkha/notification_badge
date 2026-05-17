@@ -11,7 +11,7 @@ import 'package:pigeon/pigeon.dart';
     ),
     swiftOut: 'ios/Classes/pigeon/NotificationBadgeApi.g.swift',
     swiftOptions: SwiftOptions(),
-    dartPackageName: 'notification_badge',
+    dartPackageName: 'notification_badge_counter',
   ),
 )
 /// API for managing app icon badge counts on Android and iOS.
