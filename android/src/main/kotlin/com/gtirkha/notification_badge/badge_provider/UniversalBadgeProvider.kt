@@ -21,9 +21,9 @@ class UniversalBadgeProvider(private val context: Context) : BadgeProvider {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
     }
 
-    override fun setBadgeCount(count: Int): Boolean = setBadgeCount(count, null)
+    override fun setBadgeCount(count: Int): Boolean = setBadgeCount(count, null, null)
 
-    fun setBadgeCount(count: Int, notificationTitle: String?): Boolean {
+    fun setBadgeCount(count: Int, notificationTitle: String?, notificationIcon: String? = null): Boolean {
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             return false
@@ -52,7 +52,7 @@ class UniversalBadgeProvider(private val context: Context) : BadgeProvider {
             val title = notificationTitle?.takeIf { it.isNotBlank() } ?: " "
 
             val notification = NotificationCompat.Builder(context, CHANNEL_ID)
-                .setSmallIcon(getNotificationIcon())
+                .setSmallIcon(resolveIcon(notificationIcon))
                 .setContentTitle(title)
                 .setContentText(" ")
                 .setNumber(count)
@@ -127,18 +127,12 @@ class UniversalBadgeProvider(private val context: Context) : BadgeProvider {
         )
     }
 
-    private fun getNotificationIcon(): Int {
-
-        val resId = context.resources.getIdentifier(
-            "ic_notification",
-            "drawable",
-            context.packageName
-        )
-
-        return if (resId != 0) {
-            resId
-        } else {
-            android.R.drawable.ic_dialog_info
+    private fun resolveIcon(notificationIcon: String?): Int {
+        if (!notificationIcon.isNullOrBlank()) {
+            val resId = context.resources.getIdentifier(notificationIcon, "drawable", context.packageName)
+            if (resId != 0) return resId
         }
+        val defaultResId = context.resources.getIdentifier("ic_notification", "drawable", context.packageName)
+        return if (defaultResId != 0) defaultResId else android.R.drawable.ic_dialog_info
     }
 }

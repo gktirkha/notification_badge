@@ -89,7 +89,7 @@ class NotificationBadgeApiPigeonCodec: FlutterStandardMessageCodec, @unchecked S
 /// Generated protocol from Pigeon that represents a handler of messages from Flutter.
 protocol NotificationBadgeApi {
   func isSupported(completion: @escaping (Result<Bool, Error>) -> Void)
-  func setCount(count: Int64, notificationTitle: String, completion: @escaping (Result<Bool, Error>) -> Void)
+  func setCount(count: Int64, completion: @escaping (Result<Bool, Error>) -> Void)
   func getBadgeCount(completion: @escaping (Result<Int64, Error>) -> Void)
   func clearBadge(completion: @escaping (Result<Bool, Error>) -> Void)
   func getDeviceManufacturer(completion: @escaping (Result<String, Error>) -> Void)
@@ -97,6 +97,8 @@ protocol NotificationBadgeApi {
   func decrementCount(completion: @escaping (Result<Bool, Error>) -> Void)
   func checkPermissions(completion: @escaping (Result<Bool, Error>) -> Void)
   func requestPermissions(completion: @escaping (Result<Bool, Error>) -> Void)
+  func setNotificationTitle(title: String, completion: @escaping (Result<Bool, Error>) -> Void)
+  func setNotificationIcon(icon: String, completion: @escaping (Result<Bool, Error>) -> Void)
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
@@ -125,8 +127,7 @@ class NotificationBadgeApiSetup {
       setCountChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let countArg = args[0] as! Int64
-        let notificationTitleArg = args[1] as! String
-        api.setCount(count: countArg, notificationTitle: notificationTitleArg) { result in
+        api.setCount(count: countArg) { result in
           switch result {
           case .success(let res):
             reply(wrapResult(res))
@@ -242,6 +243,40 @@ class NotificationBadgeApiSetup {
       }
     } else {
       requestPermissionsChannel.setMessageHandler(nil)
+    }
+    let setNotificationTitleChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.notification_badge.NotificationBadgeApi.setNotificationTitle\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setNotificationTitleChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let titleArg = args[0] as! String
+        api.setNotificationTitle(title: titleArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setNotificationTitleChannel.setMessageHandler(nil)
+    }
+    let setNotificationIconChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.notification_badge.NotificationBadgeApi.setNotificationIcon\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setNotificationIconChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let iconArg = args[0] as! String
+        api.setNotificationIcon(icon: iconArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setNotificationIconChannel.setMessageHandler(nil)
     }
   }
 }

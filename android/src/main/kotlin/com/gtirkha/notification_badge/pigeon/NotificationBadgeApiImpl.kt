@@ -36,6 +36,8 @@ class NotificationBadgeApiImpl(private val context: Context) : NotificationBadge
 
     companion object {
         private const val PERMISSION_REQUEST_CODE = 0x4E42_5047
+        var notificationTitle: String = "Notification Badge"
+        var notificationIcon: String = ""
     }
 
     fun attachToActivity(binding: ActivityPluginBinding) {
@@ -63,14 +65,10 @@ class NotificationBadgeApiImpl(private val context: Context) : NotificationBadge
     )
 
     fun getSupportedProviders(): List<String> {
-        val supportedProviders =
-            badgeProviders.filter { it.isSupported() }.map { it.javaClass.simpleName }
-        return supportedProviders
+        return badgeProviders.filter { it.isSupported() }.map { it.javaClass.simpleName }
     }
 
-    override fun setCount(
-        count: Long, notificationTitle: String, callback: (Result<Boolean>) -> Unit
-    ) {
+    override fun setCount(count: Long, callback: (Result<Boolean>) -> Unit) {
         val countInt: Int = count.toInt()
         try {
             prefs.edit { putInt(badgePrefsKey, countInt) }
@@ -103,7 +101,7 @@ class NotificationBadgeApiImpl(private val context: Context) : NotificationBadge
             if (!anySuccess && universalProvider != null) {
                 Log.d(tag, "No specific provider succeeded, falling back to UniversalBadgeProvider")
                 try {
-                    if (universalProvider.setBadgeCount(countInt, notificationTitle)) {
+                    if (universalProvider.setBadgeCount(countInt, notificationTitle, notificationIcon.takeIf { it.isNotBlank() })) {
                         anySuccess = true
                         Log.d(tag, "Successfully set badge using UniversalBadgeProvider")
                     }
@@ -122,19 +120,13 @@ class NotificationBadgeApiImpl(private val context: Context) : NotificationBadge
     override fun isSupported(callback: (Result<Boolean>) -> Unit) {
         val supported = badgeProviders.any { it.isSupported() }
         if (supported) {
-            val supportedProviders = getSupportedProviders()
-            Log.d(
-                tag, "Supported providers: ${supportedProviders.joinToString()}"
-            )
+            Log.d(tag, "Supported providers: ${getSupportedProviders().joinToString()}")
         } else {
-            Log.d(
-                tag, "Not Supported"
-            )
+            Log.d(tag, "Not Supported")
             return callback(Result.success(false))
         }
         return callback(Result.success(true))
     }
-
 
     override fun getBadgeCount(callback: (Result<Long>) -> Unit) {
         val count = prefs.getInt(badgePrefsKey, 0)
@@ -214,5 +206,15 @@ class NotificationBadgeApiImpl(private val context: Context) : NotificationBadge
 
     override fun clearBadge(callback: (Result<Boolean>) -> Unit) {
         setCount(0, callback)
+    }
+
+    override fun setNotificationTitle(title: String, callback: (Result<Boolean>) -> Unit) {
+        notificationTitle = title
+        callback(Result.success(true))
+    }
+
+    override fun setNotificationIcon(icon: String, callback: (Result<Boolean>) -> Unit) {
+        notificationIcon = icon
+        callback(Result.success(true))
     }
 }
