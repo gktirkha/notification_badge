@@ -14,6 +14,7 @@ import com.gtirkha.notification_badge.badge_provider.OnePlusBadgeProvider
 import com.gtirkha.notification_badge.badge_provider.OppoBadgeProvider
 import com.gtirkha.notification_badge.badge_provider.SamsungBadgeProvider
 import com.gtirkha.notification_badge.badge_provider.SonyBadgeProvider
+import com.gtirkha.notification_badge.badge_provider.UniversalBadgeProvider
 import com.gtirkha.notification_badge.badge_provider.VivoBadgeProvider
 import com.gtirkha.notification_badge.badge_provider.XiaomiBadgeProvider
 
@@ -33,7 +34,8 @@ class NotificationBadgeApiImpl(context: Context) : NotificationBadgeApi {
         SonyBadgeProvider(context),
         HTCBadgeProvider(context),
         LGBadgeProvider(context),
-        NovaLauncherBadgeProvider(context)
+        NovaLauncherBadgeProvider(context),
+        UniversalBadgeProvider(context)
     )
 
     fun getSupportedProviders(): List<String> {

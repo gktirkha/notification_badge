@@ -12,35 +12,30 @@ class HTCBadgeProvider(private val context: Context) : BadgeProvider {
     }
 
     override fun setBadgeCount(count: Int): Boolean {
-        return try {
+        var anySent = false
+
+        // Primary HTC launcher method
+        try {
             val intent = Intent("com.htc.launcher.action.UPDATE_SHORTCUT").apply {
                 putExtra("packagename", context.packageName)
                 putExtra("count", count)
                 putExtra("extra_component_name", getLauncherActivityClass())
             }
-
             context.sendBroadcast(intent)
-            true
-        } catch (_: Exception) {
-            tryAlternativeHTCMethod(count)
-        }
-    }
+            anySent = true
+        } catch (_: Exception) { }
 
-    private fun tryAlternativeHTCMethod(count: Int): Boolean {
-        return try {
+        // Alternative HTC method using component string format
+        try {
             val intent = Intent("com.htc.launcher.action.SET_NOTIFICATION").apply {
-                putExtra(
-                    "com.htc.launcher.extra.COMPONENT",
-                    "${context.packageName}/${getLauncherActivityClass()}"
-                )
+                putExtra("com.htc.launcher.extra.COMPONENT", "${context.packageName}/${getLauncherActivityClass()}")
                 putExtra("com.htc.launcher.extra.COUNT", count)
             }
-
             context.sendBroadcast(intent)
-            true
-        } catch (_: Exception) {
-            false
-        }
+            anySent = true
+        } catch (_: Exception) { }
+
+        return anySent
     }
 
     private fun getLauncherActivityClass(): String {

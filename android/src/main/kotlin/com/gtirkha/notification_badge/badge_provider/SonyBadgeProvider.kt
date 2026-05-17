@@ -12,43 +12,33 @@ class SonyBadgeProvider(private val context: Context) : BadgeProvider {
     }
 
     override fun setBadgeCount(count: Int): Boolean {
-        return try {
+        var anySent = false
+
+        // Older Sony Ericsson devices
+        try {
             val intent = Intent("com.sonyericsson.home.action.UPDATE_BADGE").apply {
-                putExtra(
-                    "com.sonyericsson.home.intent.extra.badge.PACKAGE_NAME", context.packageName
-                )
-                putExtra(
-                    "com.sonyericsson.home.intent.extra.badge.ACTIVITY_NAME",
-                    getLauncherActivityClass()
-                )
+                putExtra("com.sonyericsson.home.intent.extra.badge.PACKAGE_NAME", context.packageName)
+                putExtra("com.sonyericsson.home.intent.extra.badge.ACTIVITY_NAME", getLauncherActivityClass())
                 putExtra("com.sonyericsson.home.intent.extra.badge.MESSAGE", count.toString())
                 putExtra("com.sonyericsson.home.intent.extra.badge.SHOW_MESSAGE", count > 0)
             }
-
             context.sendBroadcast(intent)
-            true
-        } catch (_: Exception) {
-            tryAlternativeSonyMethod(count)
-        }
-    }
+            anySent = true
+        } catch (_: Exception) { }
 
-    private fun tryAlternativeSonyMethod(count: Int): Boolean {
-        return try {
+        // Newer Sony Mobile devices
+        try {
             val intent = Intent("com.sonymobile.home.action.UPDATE_BADGE").apply {
                 putExtra("com.sonymobile.home.intent.extra.badge.PACKAGE_NAME", context.packageName)
-                putExtra(
-                    "com.sonymobile.home.intent.extra.badge.ACTIVITY_NAME",
-                    getLauncherActivityClass()
-                )
+                putExtra("com.sonymobile.home.intent.extra.badge.ACTIVITY_NAME", getLauncherActivityClass())
                 putExtra("com.sonymobile.home.intent.extra.badge.MESSAGE", count.toString())
                 putExtra("com.sonymobile.home.intent.extra.badge.SHOW_MESSAGE", count > 0)
             }
-
             context.sendBroadcast(intent)
-            true
-        } catch (_: Exception) {
-            false
-        }
+            anySent = true
+        } catch (_: Exception) { }
+
+        return anySent
     }
 
     private fun getLauncherActivityClass(): String {
