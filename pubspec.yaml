@@ -1,8 +1,8 @@
 name: notification_badge_counter
 description: "A Flutter plugin for setting app icon badge counts on Android and iOS. Supports manufacturer-specific badge APIs with an automatic notification-based fallback."
-version: 0.0.1
-homepage: https://github.com/gktirkha/notification_badge
-repository: https://github.com/gktirkha/notification_badge
+version: 1.0.0
+homepage: https://github.com/gktirkha/notification_badge_counter
+repository: https://github.com/gktirkha/notification_badge_counter
 
 environment:
   sdk: ^3.11.5
