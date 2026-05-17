@@ -19,7 +19,10 @@ abstract class NotificationBadgeApi {
   @async
   bool isSupported();
   @async
-  bool setCount(int count);
+  bool setCount(
+    int count, [
+    String notificationTitle = 'Setting Notification Badge',
+  ]);
   @async
   int getBadgeCount();
   @async

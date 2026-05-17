@@ -2,7 +2,7 @@ import UIKit
 import UserNotifications
 
 class NotificationBadgeApiImpl: NotificationBadgeApi {
-  func setCount(count: Int64, completion: @escaping (Result<Bool, any Error>) -> Void) {
+  func setCount(count: Int64, notificationTitle: String, completion: @escaping (Result<Bool, any Error>) -> Void) {
     if count < 0 {
       completion(
         .failure(
@@ -114,6 +114,6 @@ class NotificationBadgeApiImpl: NotificationBadgeApi {
     }
   }
   func clearBadge(completion: @escaping (Result<Bool, any Error>) -> Void) {
-    setCount(count: 0, completion: completion)
+    setCount(count: 0, notificationTitle: "", completion: completion)
   }
 }

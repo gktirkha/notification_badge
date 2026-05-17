@@ -89,7 +89,7 @@ class NotificationBadgeApiPigeonCodec: FlutterStandardMessageCodec, @unchecked S
 /// Generated protocol from Pigeon that represents a handler of messages from Flutter.
 protocol NotificationBadgeApi {
   func isSupported(completion: @escaping (Result<Bool, Error>) -> Void)
-  func setCount(count: Int64, completion: @escaping (Result<Bool, Error>) -> Void)
+  func setCount(count: Int64, notificationTitle: String, completion: @escaping (Result<Bool, Error>) -> Void)
   func getBadgeCount(completion: @escaping (Result<Int64, Error>) -> Void)
   func clearBadge(completion: @escaping (Result<Bool, Error>) -> Void)
   func getDeviceManufacturer(completion: @escaping (Result<String, Error>) -> Void)
@@ -125,7 +125,8 @@ class NotificationBadgeApiSetup {
       setCountChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let countArg = args[0] as! Int64
-        api.setCount(count: countArg) { result in
+        let notificationTitleArg = args[1] as! String
+        api.setCount(count: countArg, notificationTitle: notificationTitleArg) { result in
           switch result {
           case .success(let res):
             reply(wrapResult(res))

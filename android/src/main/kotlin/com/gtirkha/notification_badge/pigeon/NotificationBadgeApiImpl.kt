@@ -69,7 +69,7 @@ class NotificationBadgeApiImpl(private val context: Context) : NotificationBadge
     }
 
     override fun setCount(
-        count: Long, callback: (Result<Boolean>) -> Unit
+        count: Long, notificationTitle: String, callback: (Result<Boolean>) -> Unit
     ) {
         val countInt: Int = count.toInt()
         try {
@@ -103,7 +103,7 @@ class NotificationBadgeApiImpl(private val context: Context) : NotificationBadge
             if (!anySuccess && universalProvider != null) {
                 Log.d(tag, "No specific provider succeeded, falling back to UniversalBadgeProvider")
                 try {
-                    if (universalProvider.setBadgeCount(countInt)) {
+                    if (universalProvider.setBadgeCount(countInt, notificationTitle)) {
                         anySuccess = true
                         Log.d(tag, "Successfully set badge using UniversalBadgeProvider")
                     }

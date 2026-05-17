@@ -89,14 +89,14 @@ class NotificationBadgeApi {
     return pigeonVar_replyValue! as bool;
   }
 
-  Future<bool> setCount(int count) async {
+  Future<bool> setCount(int count, [String notificationTitle = 'Setting Notification Badge']) async {
     final pigeonVar_channelName = 'dev.flutter.pigeon.notification_badge.NotificationBadgeApi.setCount$pigeonVar_messageChannelSuffix';
     final pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
       binaryMessenger: pigeonVar_binaryMessenger,
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[count]);
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[count, notificationTitle]);
     final pigeonVar_replyList = await pigeonVar_sendFuture as List<Object?>?;
 
     final Object? pigeonVar_replyValue = _extractReplyValueOrThrow(

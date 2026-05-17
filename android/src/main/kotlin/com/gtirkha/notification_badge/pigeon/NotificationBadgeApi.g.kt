@@ -60,7 +60,7 @@ private open class NotificationBadgeApiPigeonCodec : StandardMessageCodec() {
 /** Generated interface from Pigeon that represents a handler of messages from Flutter. */
 interface NotificationBadgeApi {
   fun isSupported(callback: (Result<Boolean>) -> Unit)
-  fun setCount(count: Long, callback: (Result<Boolean>) -> Unit)
+  fun setCount(count: Long, notificationTitle: String, callback: (Result<Boolean>) -> Unit)
   fun getBadgeCount(callback: (Result<Long>) -> Unit)
   fun clearBadge(callback: (Result<Boolean>) -> Unit)
   fun getDeviceManufacturer(callback: (Result<String>) -> Unit)
@@ -102,7 +102,8 @@ interface NotificationBadgeApi {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val countArg = args[0] as Long
-            api.setCount(countArg) { result: Result<Boolean> ->
+            val notificationTitleArg = args[1] as String
+            api.setCount(countArg, notificationTitleArg) { result: Result<Boolean> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(NotificationBadgeApiPigeonUtils.wrapError(error))
