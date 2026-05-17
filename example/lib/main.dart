@@ -59,6 +59,12 @@ class _BadgeDemoPageState extends State<BadgeDemoPage> {
     final manufacturer = await _badge.getDeviceManufacturer();
     final count = await _badge.getBadgeCount();
     final permission = await _badge.checkPermissions();
+    await _badge.setAndroidNotificationConfig(
+      notificationIcon: _iconController.text,
+      notificationTitle: _titleController.text,
+      notificationMessage: _messageController.text,
+      fallbackToUniversaLAndroidBadger: _fallbackToUniversal,
+    );
     setState(() {
       _isSupported = supported;
       _manufacturer = manufacturer;
