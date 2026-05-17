@@ -143,11 +143,13 @@ class _BadgeDemoPageState extends State<BadgeDemoPage> {
           : _messageController.text.trim(),
       fallbackToUniversaLAndroidBadger: _fallbackToUniversal,
     );
-    setState(
-      () => _status = success
+    final supported = await _badge.isSupported();
+    setState(() {
+      _isSupported = supported;
+      _status = success
           ? 'Notification config applied'
-          : 'Failed to apply config',
-    );
+          : 'Failed to apply config';
+    });
   }
 
   @override

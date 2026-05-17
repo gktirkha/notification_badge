@@ -120,7 +120,9 @@ class NotificationBadgeApiImpl(private val context: Context) : NotificationBadge
     }
 
     override fun isSupported(callback: (Result<Boolean>) -> Unit) {
-        val supported = badgeProviders.any { it.isSupported() }
+        val eligible = if (fallbackToUniversal) badgeProviders
+                       else badgeProviders.filterNot { it is UniversalBadgeProvider }
+        val supported = eligible.any { it.isSupported() }
         if (supported) {
             Log.d(tag, "Supported providers: ${getSupportedProviders().joinToString()}")
         } else {
